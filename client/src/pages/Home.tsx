@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
-import { SERVICES, PORTFOLIO_ITEMS, TESTIMONIALS } from "@/lib/constants";
-import ServiceCard from "@/components/shared/ServiceCard";
-import PortfolioGrid from "@/components/shared/PortfolioGrid";
-import TestimonialCarousel from "@/components/shared/TestimonialCarousel";
+import { SERVICES, PORTFOLIO_ITEMS, TESTIMONIALS } from "../lib/constants";
+import ServiceCard from "../components/shared/ServiceCard";
+import PortfolioGrid from "../components/shared/PortfolioGrid";
+import TestimonialCarousel from "../components/shared/TestimonialCarousel";
 
 export default function Home() {
   return (

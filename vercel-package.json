@@ -1,0 +1,23 @@
+{
+  "name": "vercel-deployment",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "chmod +x build.sh && ./build.sh",
+    "deploy": "vercel deploy"
+  },
+  "dependencies": {
+    "vite": "^4.5.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "wouter": "^2.12.0",
+    "@tanstack/react-query": "^5.8.4",
+    "express": "^4.18.2",
+    "esbuild": "^0.19.5"
+  }
+}
