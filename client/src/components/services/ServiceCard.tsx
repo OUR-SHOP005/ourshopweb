@@ -1,18 +1,18 @@
 import { Check } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ServiceItem } from "@/lib/data";
+import { SERVICES } from "@/lib/constants";
 
 interface ServiceCardProps {
-  service: ServiceItem;
+  service: typeof SERVICES[0];
 }
 
 const ServiceCard = ({ service }: ServiceCardProps) => {
   return (
-    <Card id={service.id} className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+    <Card className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
       <CardContent className="p-0">
         <div className="flex items-start mb-6">
           <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
-            {service.icon}
+            <span className="text-primary">{service.icon}</span>
           </div>
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-1">
@@ -27,7 +27,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
             What's Included:
           </h4>
           <ul className="space-y-2">
-            {service.includedItems.map((item, index) => (
+            {service.details.map((item, index) => (
               <li key={index} className="flex items-start">
                 <Check className="h-5 w-5 text-primary mr-2 mt-0.5" />
                 <span>{item}</span>
@@ -37,7 +37,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
         </div>
 
         <div className="text-gray-800 font-semibold mb-6">
-          Starting from ${service.startingPrice.toLocaleString()}
+          {service.pricing}
         </div>
       </CardContent>
     </Card>

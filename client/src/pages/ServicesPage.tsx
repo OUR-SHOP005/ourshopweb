@@ -1,5 +1,5 @@
 import ServiceCard from "@/components/services/ServiceCard";
-import { services } from "@/lib/data";
+import { SERVICES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
@@ -17,8 +17,8 @@ const ServicesPage = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {services.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+          {SERVICES.map((service, index) => (
+            <ServiceCard key={index} service={service} />
           ))}
         </div>
 
