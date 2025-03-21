@@ -11,9 +11,29 @@ if [ -f "vercel-package.json" ]; then
   cp vercel-package.json package.json.bak
 fi
 
+# Ensure index.html is at the root for Vercel
+echo "📄 Preparing HTML entry point..."
+if [ -f "client/index.html" ]; then
+  # Copy index.html to the root and update the path to main.tsx
+  cp client/index.html index.html
+  sed -i 's|src="/src/main.tsx"|src="/client/src/main.tsx"|g' index.html
+fi
+
 # Build the frontend with optimized settings
 echo "🏗️ Building frontend..."
-VITE_DEPLOYMENT_ENV=production npx vite build --config vite.vercel.config.js
+VITE_DEPLOYMENT_ENV=production npx vite build -c vite.vercel.config.js
+
+# Make sure dist exists and has the right content
+echo "🔍 Verifying dist directory..."
+if [ ! -d "dist" ]; then
+  echo "Creating dist directory..."
+  mkdir -p dist
+fi
+
+# If index.html is not in dist, copy it there
+if [ ! -f "dist/index.html" ] && [ -f "index.html" ]; then
+  cp index.html dist/index.html
+fi
 
 # Build the backend for serverless functions
 echo "🏗️ Building backend for serverless functions..."
@@ -57,5 +77,9 @@ EOL
 if [ -f "package.json.bak" ]; then
   mv package.json.bak package.json
 fi
+
+# List contents of dist to verify
+echo "📁 Contents of dist directory:"
+ls -la dist/
 
 echo "✅ Build completed successfully!"
