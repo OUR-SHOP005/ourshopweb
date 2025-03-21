@@ -1,6 +1,4 @@
-
-import { Route, Switch } from "wouter";
-  import { ThemeProvider } from "./components/theme-provider";   // Relative path
+import { Router, Route } from "wouter";  // ✅ Use Router instead of Switch
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/query";
@@ -22,23 +20,21 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-          <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-grow">
-              <Switch>
-                <Route path="/" component={Home} />
-                <Route path="/about" component={About} />
-                <Route path="/services" component={Services} />
-                <Route path="/portfolio" component={Portfolio} />
-                <Route path="/contact" component={Contact} />
-                <Route component={NotFound} />
-              </Switch>
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
-        </ThemeProvider>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-grow">
+            <Router>
+              <Route path="/" component={Home} />
+              <Route path="/about" component={About} />
+              <Route path="/services" component={Services} />
+              <Route path="/portfolio" component={Portfolio} />
+              <Route path="/contact" component={Contact} />
+              <Route component={NotFound} />
+            </Router>
+          </main>
+          <Footer />
+        </div>
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   );
