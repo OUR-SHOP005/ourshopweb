@@ -1,23 +1,26 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist/server",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": null,
   "outputDirectory": "dist",
   "functions": {
-    "api/*.js": {
+    "dist/server/index.js": {
       "memory": 1024,
       "maxDuration": 10
     }
   },
   "routes": [
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/api/(.*)", "dest": "/server/index.js" },
+    { "src": "/(.*\\.(js|css|ico|png|jpg|svg|json))", "dest": "/$1" },
     { "handle": "filesystem" },
-    { "src": "/api/(.*)", "dest": "/api" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "env": {
     "RESEND_API_KEY": "${RESEND_API_KEY}",
-    "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+    "GEMINI_API_KEY": "${GEMINI_API_KEY}",
+    "NODE_ENV": "production"
   }
 }
