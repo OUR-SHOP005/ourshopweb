@@ -1,96 +1,126 @@
-import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { MoonIcon, SunIcon, MenuIcon } from "lucide-react";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-const NAV_ITEMS = [
-  { label: "Home", path: "/" },
-  { label: "Portfolio", path: "/portfolio" },
-  { label: "Services", path: "/services" },
-  { label: "About", path: "/about" },
-  { label: "Contact", path: "/contact" },
+const navigation = [
+  { name: "Home", href: "/" },
+  { name: "Portfolio", href: "/portfolio" },
+  { name: "Services", href: "/services" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contact" },
 ];
 
-export default function Navbar() {
+const Navbar = () => {
   const [location] = useLocation();
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.classList.toggle("dark");
-  };
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50 border-b">
-      <div className="container flex h-16 items-center justify-between mx-auto px-4 sm:px-6 lg:px-8 my-2">
-        <Link href="/">
-          <a className="flex items-center gap-3">
-            <img 
-              src="/assets/logo.jpeg" 
-              alt="Our Shop Logo" 
-              className="h-10 w-10 rounded-full border-2 border-primary object-cover" // Added circular styling
-            />
-            <span className="text-xl font-semibold">OUR SHOP</span>
-          </a>
-        </Link>
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-4">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </div>
+            <span className="text-lg font-bold tracking-tight text-gray-900">
+              OUR SHOP
+            </span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          {NAV_ITEMS.map((item) => (
-            <Link key={item.path} href={item.path}>
-              <a
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  location === item.path ? "text-primary" : "text-muted-foreground"
+          <nav className="hidden md:flex space-x-8">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`font-medium ${
+                  location === item.href
+                    ? "text-gray-900"
+                    : "text-gray-500 hover:text-primary"
                 }`}
               >
-                {item.label}
-              </a>
-            </Link>
-          ))}
-          <Button variant="ghost" size="icon" onClick={toggleTheme}>
-            {theme === "light" ? (
-              <MoonIcon className="h-5 w-5" />
-            ) : (
-              <SunIcon className="h-5 w-5" />
-            )}
-          </Button>
-        </div>
+                {item.name}
+              </Link>
+            ))}
+          </nav>
 
-        {/* Mobile Navigation */}
-        <Sheet>
-          <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon">
-              <MenuIcon className="h-5 w-5" />
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="p-2 rounded-full hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 15a7 7 0 100-14 7 7 0 000 14z"
+                  clipRule="evenodd"
+                />
+                <path
+                  fillRule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <div className="flex flex-col gap-4 pt-8">
-              {NAV_ITEMS.map((item) => (
-                <Link key={item.path} href={item.path}>
-                  <a
-                    className={`text-lg font-medium ${
-                      location === item.path
-                        ? "text-primary"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                </Link>
-              ))}
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                {theme === "light" ? (
-                  <MoonIcon className="h-5 w-5" />
-                ) : (
-                  <SunIcon className="h-5 w-5" />
-                )}
-              </Button>
-            </div>
-          </SheetContent>
-        </Sheet>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden ml-2 p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
+        </div>
       </div>
-    </nav>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden" id="mobile-menu">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  location === item.href
+                    ? "text-gray-900 bg-gray-50"
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </header>
   );
-}
+};
+
+export default Navbar;

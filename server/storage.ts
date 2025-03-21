@@ -1,29 +1,38 @@
-import { contactMessages, type ContactMessage, type InsertContactMessage } from "@shared/schema";
+import { users, type User, type InsertUser } from "@shared/schema";
+
+// modify the interface with any CRUD methods
+// you might need
 
 export interface IStorage {
-  createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
+  getUser(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
 }
 
 export class MemStorage implements IStorage {
-  private messages: Map<number, ContactMessage>;
-  private currentId: number;
+  private users: Map<number, User>;
+  currentId: number;
 
   constructor() {
-    this.messages = new Map();
+    this.users = new Map();
     this.currentId = 1;
   }
 
-  async createContactMessage(insertMessage: InsertContactMessage): Promise<ContactMessage> {
+  async getUser(id: number): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.username === username,
+    );
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentId++;
-    const message: ContactMessage = {
-      id,
-      name: insertMessage.name,
-      email: insertMessage.email,
-      message: insertMessage.message,
-      company: insertMessage.company ?? null
-    };
-    this.messages.set(id, message);
-    return message;
+    const user: User = { ...insertUser, id };
+    this.users.set(id, user);
+    return user;
   }
 }
 

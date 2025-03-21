@@ -1,47 +1,36 @@
 import type { Express } from "express";
-import { createServer } from "http";
+import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactMessageSchema } from "@shared/schema";
-import { ZodError } from "zod";
-import { sendContactEmail } from "./lib/email";
-import { generateGeminiResponse } from "./lib/gemini";
+import { z } from "zod";
 
-import { getUserFromRequest, authMiddleware } from "./auth";
+const contactSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  company: z.string().optional(),
+  message: z.string().min(10),
+});
 
-export async function registerRoutes(app: Express) {
-  app.get("/api/auth/user", (req, res) => {
-    const user = getUserFromRequest(req);
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(401).json({ message: "Not authenticated" });
-    }
-  });
-
-  // Protected routes example
-  app.get("/api/protected", authMiddleware, (req, res) => {
-    res.json({ message: "This is a protected route", user: req.user });
-  });
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Contact form endpoint
   app.post("/api/contact", async (req, res) => {
     try {
-      const messageData = insertContactMessageSchema.parse(req.body);
-      const message = await storage.createContactMessage(messageData);
-
-      // Send email notification
-      await sendContactEmail(message);
-
-      res.json(message);
+      const validatedData = contactSchema.parse(req.body);
+      
+      // In a real application, this would send an email
+      // For now, we'll just log it to the console
+      console.log("Contact form submission:", validatedData);
+      
+      // Optionally save to database
+      // await storage.saveContactSubmission(validatedData);
+      
+      res.status(200).json({ message: "Message received successfully" });
     } catch (error) {
-      if (error instanceof ZodError) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        console.error('Contact form error:', error);
-        res.status(500).json({ message: "Failed to send message" });
-      }
+      console.error("Error processing contact form:", error);
+      res.status(400).json({ message: "Invalid form data" });
     }
   });
 
-  app.post("/api/chat", generateGeminiResponse);
-  
-  return createServer(app);
+  const httpServer = createServer(app);
+
+  return httpServer;
 }
