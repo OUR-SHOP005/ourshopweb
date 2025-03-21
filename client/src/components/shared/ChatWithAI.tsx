@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ReactMarkdown from "react-markdown";
 
 interface Message {
   role: "user" | "assistant";
@@ -21,7 +22,7 @@ const ChatWithAI = () => {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
     
     const userMessage: Message = { role: "user", content: input };
     setMessages(prev => [...prev, userMessage]);
@@ -29,20 +30,27 @@ const ChatWithAI = () => {
     setIsLoading(true);
     
     try {
-      // Here you would normally make an API call to a backend service
-      // Instead, we'll simulate a response
-      setTimeout(() => {
-        setMessages(prev => [
-          ...prev, 
-          { 
-            role: "assistant", 
-            content: "Thanks for your message! Our team will review your inquiry and get back to you soon. Would you like to leave your email address so we can contact you?" 
-          }
-        ]);
-        setIsLoading(false);
-      }, 1000);
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input.trim() }),
+      });
+
+      const data = await response.json();
+      const botMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || 
+        "Sorry, I couldn't generate a response";
+
+      setMessages(prev => [
+        ...prev, 
+        { role: "assistant", content: botMessage }
+      ]);
     } catch (error) {
       console.error('Error sending message:', error);
+      setMessages(prev => [
+        ...prev, 
+        { role: "assistant", content: "Sorry, something went wrong. Please try again later." }
+      ]);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -96,7 +104,7 @@ const ChatWithAI = () => {
                         : "bg-gray-100 text-gray-800"
                     }`}
                   >
-                    {message.content}
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
                   </div>
                 </div>
               ))}
