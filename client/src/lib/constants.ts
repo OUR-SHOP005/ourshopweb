@@ -2,22 +2,54 @@ export const SERVICES = [
   {
     title: "Web Design",
     description: "Beautiful, responsive websites that engage your audience",
-    icon: "Palette"
+    icon: "Palette",
+    details: [
+      "Custom responsive design",
+      "Mobile-first approach",
+      "UI/UX optimization",
+      "Brand integration",
+      "Cross-browser compatibility"
+    ],
+    pricing: "Starting from ₹3,000"
   },
   {
     title: "Web Development",
     description: "Custom web applications built with modern technologies",
-    icon: "Code2"
+    icon: "Code2",
+    details: [
+      "Full-stack development",
+      "API integration",
+      "Database setup",
+      "Performance optimization",
+      "Security implementation"
+    ],
+    pricing: "Starting from ₹5,000"
   },
   {
     title: "E-Commerce",
     description: "Online stores that drive sales and growth",
-    icon: "ShoppingCart"
+    icon: "ShoppingCart",
+    details: [
+      "Product catalog setup",
+      "Payment gateway integration",
+      "Inventory management",
+      "Order processing system",
+      "Shopping cart functionality"
+    ],
+    pricing: "Starting from ₹8,000"
   },
   {
     title: "UI/UX Design",
     description: "User-centered design that converts visitors into customers",
-    icon: "Layout"
+    icon: "Layout",
+    details: [
+      "User interface design",
+      "User experience optimization",
+      "Wireframing",
+      "Prototyping",
+      "User flow optimization"
+    ],
+    pricing: "Starting from ₹4,000"
   }
 ];
 
