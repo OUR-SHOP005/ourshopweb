@@ -7,14 +7,15 @@ channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "cloudrun"
-run = ["sh", "-c", "npm run dev"]
+run = ["sh", "-c", "NODE_ENV=production node dist/server/index.js"]
+build = ["sh", "-c", "npm run build"]
 
 [[ports]]
 localPort = 5000
 externalPort = 80
 
 [workflows]
-runButton = "Start Dev Server"
+runButton = "Dev Server"
 
 [[workflows.workflow]]
 name = "Project"
@@ -44,6 +45,19 @@ waitForPort = 5000
 name = "Start Dev Server"
 author = 40697611
 mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow]]
+name = "Dev Server"
+author = 40697611
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
