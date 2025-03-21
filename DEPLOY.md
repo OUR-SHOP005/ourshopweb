@@ -10,56 +10,53 @@ This guide provides step-by-step instructions for deploying this application to 
 
 ## Deployment Instructions
 
-### Option 1: Direct from GitHub
+### Updated Approach (Recommended)
 
 1. Create a new project in Vercel
 2. Connect to your GitHub repository
 3. Configure the project with these settings:
-   - Framework Preset: `Other`
-   - Build Command: `chmod +x build.sh && ./build.sh`
-   - Output Directory: `dist`
-   - Install Command: `npm install`
+   - Framework Preset: None (or select "Other") 
+   - Build Command: `cd client && npm run build`
+   - Output Directory: `client/dist`
+   - Install Command: `cd client && npm install`
 
 4. Add any necessary environment variables
 5. Click "Deploy"
 
-### Option 2: Using Vercel CLI
+### Alternative Options
 
-1. Install Vercel CLI:
-   ```
-   npm install -g vercel
-   ```
+You can also deploy using:
 
-2. Log into Vercel:
-   ```
-   vercel login
-   ```
-
-3. Deploy from the root of the project:
+1. Vercel CLI:
    ```
    vercel
    ```
 
-4. Follow the prompts and use these settings:
-   - Build Command: `chmod +x build.sh && ./build.sh`
-   - Output Directory: `dist`
-   - Development Command: `npm run dev`
+2. Dashboard:
+   - Choose "No framework preset" when deploying
+   - Make sure your Root Directory is set to the repository root
+   - Let Vercel use the settings from vercel.json
 
 ## Important Files for Deployment
 
 The following files handle the deployment process:
 
-- `vercel.json`: Configuration for Vercel deployment
-- `build.sh`: Custom build script that properly handles the build process
-- `vite.vercel.config.js`: Specialized Vite configuration for Vercel
+- `vercel.json`: Simple configuration that tells Vercel to build the client directory
+- `client/package.json`: Contains build script for the frontend
+- `client/vite.config.js`: Vite configuration specific to the client
 
 ## Troubleshooting
 
 If you encounter issues with the deployment:
 
 1. Check the Vercel build logs for specific errors
-2. Ensure all dependencies are properly listed in package.json
-3. Verify that the paths in import statements don't use @ aliases directly
-4. Make sure the `api` directory is correctly set up for serverless functions
+2. Make sure package.json exists in the client directory
+3. Verify that the output directory is correctly set to `client/dist`
+4. Try deploying with a simpler configuration first, then add more complex settings
 
-For path resolution issues (common with Vite/React apps using path aliases like `@/components`), the build script automatically fixes these for the production build.
+The key to fixing the "No Output Directory" and "Could not resolve entry module" errors is ensuring that:
+1. We properly build the client application separately from the server
+2. We point Vercel directly to the client/dist folder
+3. We avoid complex build scripts that might confuse Vercel
+
+This simplified approach should work better with Vercel's deployment system.
