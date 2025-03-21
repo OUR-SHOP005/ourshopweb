@@ -110,7 +110,7 @@ export const TEAM_MEMBERS = [
     role: "Creative Director",
     image: "/assets/team/bhupesh.jpeg",
     bio: "Innovative Creative Director with a passion for exceptional design and branding. Expert in crafting unique digital experiences and leading creative strategies that elevate brand identities. Brings a perfect blend of artistic vision and technical understanding to every project.",
-    instagram: "thakur_ayush_singh_29"
+    instagram: "thakur_ayush_singh_29_"
   },
   {
     name: "UTKARSH CHAUDHARY",

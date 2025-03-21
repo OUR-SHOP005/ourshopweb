@@ -1,27 +1,25 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { z } from "zod";
-
-const contactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  company: z.string().optional(),
-  message: z.string().min(10),
-});
+import { contactMessageSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form endpoint
   app.post("/api/contact", async (req, res) => {
     try {
-      const validatedData = contactSchema.parse(req.body);
+      const validatedData = contactMessageSchema.parse(req.body);
       
-      // In a real application, this would send an email
-      // For now, we'll just log it to the console
+      // Log the form submission
       console.log("Contact form submission:", validatedData);
       
-      // Optionally save to database
-      // await storage.saveContactSubmission(validatedData);
+      // Send email notification
+      try {
+        const { sendContactEmail } = await import("./lib/email");
+        await sendContactEmail(validatedData);
+      } catch (emailError) {
+        console.error("Failed to send email notification:", emailError);
+        // Continue execution even if email fails
+      }
       
       res.status(200).json({ message: "Message received successfully" });
     } catch (error) {

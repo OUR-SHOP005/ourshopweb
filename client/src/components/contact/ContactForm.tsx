@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { 
@@ -15,15 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { contactMessageSchema, type InsertContactMessage } from "@shared/schema";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  company: z.string().optional(),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+// Add validation messages for better user experience
+const formSchema = contactMessageSchema.extend({
+  name: contactMessageSchema.shape.name.min(2, "Name must be at least 2 characters"),
+  email: contactMessageSchema.shape.email.email("Please enter a valid email address"),
+  message: contactMessageSchema.shape.message.min(10, "Message must be at least 10 characters"),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = InsertContactMessage;
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
