@@ -30,6 +30,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Chat API endpoint
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { generateGeminiResponse } = await import("./lib/gemini");
+      await generateGeminiResponse(req, res);
+    } catch (error) {
+      console.error("Error processing chat request:", error);
+      res.status(500).json({ message: "Failed to generate response" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
