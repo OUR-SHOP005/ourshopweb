@@ -10,53 +10,60 @@ This guide provides step-by-step instructions for deploying this application to 
 
 ## Deployment Instructions
 
-### Updated Approach (Recommended)
+### Vite Framework Approach (Recommended)
 
 1. Create a new project in Vercel
 2. Connect to your GitHub repository
 3. Configure the project with these settings:
-   - Framework Preset: None (or select "Other") 
-   - Build Command: `cd client && npm run build`
-   - Output Directory: `client/dist`
-   - Install Command: `cd client && npm install`
+   - Framework Preset: `Vite` 
+   - Root Directory: `client` (important!)
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Install Command: `npm install`
 
 4. Add any necessary environment variables
 5. Click "Deploy"
 
-### Alternative Options
+### Using vercel.json (Alternative)
 
-You can also deploy using:
+If Vercel auto-detects your project as a Vite project, you can let it use the configuration from vercel.json:
 
-1. Vercel CLI:
-   ```
-   vercel
-   ```
-
-2. Dashboard:
-   - Choose "No framework preset" when deploying
-   - Make sure your Root Directory is set to the repository root
-   - Let Vercel use the settings from vercel.json
+1. Create a new project in Vercel
+2. Connect to your GitHub repository
+3. Make sure the Root Directory is set to the repository root, not the client directory
+4. Vercel will use the settings from vercel.json:
+   - buildCommand: `cd client && npm run build`
+   - outputDirectory: `client/dist`
+   - installCommand: `cd client && npm install`
+   - framework: `vite`
 
 ## Important Files for Deployment
 
 The following files handle the deployment process:
 
-- `vercel.json`: Simple configuration that tells Vercel to build the client directory
+- `vercel.json`: Configuration that tells Vercel to build the client directory as a Vite project
 - `client/package.json`: Contains build script for the frontend
 - `client/vite.config.js`: Vite configuration specific to the client
+- `client/index.html`: Standard Vite entry point
 
 ## Troubleshooting
 
 If you encounter issues with the deployment:
 
-1. Check the Vercel build logs for specific errors
-2. Make sure package.json exists in the client directory
-3. Verify that the output directory is correctly set to `client/dist`
-4. Try deploying with a simpler configuration first, then add more complex settings
+1. **For "No Output Directory" errors**:
+   - Make sure you've set the Root Directory to `client` if using the Vite framework preset
+   - Or keep the Root Directory as the repo root and use vercel.json's outputDirectory setting
 
-The key to fixing the "No Output Directory" and "Could not resolve entry module" errors is ensuring that:
-1. We properly build the client application separately from the server
-2. We point Vercel directly to the client/dist folder
-3. We avoid complex build scripts that might confuse Vercel
+2. **For "Could not resolve entry module" errors**:
+   - Ensure client/index.html exists and has the correct path to main.tsx
+   - Make sure the Vite build process can find all entry points
 
-This simplified approach should work better with Vercel's deployment system.
+3. **Other common issues**:
+   - Try using the Vercel CLI with `vercel --debug` for more detailed logs
+   - Temporarily simplify the build by using just the frontend portion
+
+The key to successful deployment is making sure Vercel understands your project structure correctly, especially with a monorepo setup that has both frontend and backend code.
+
+## Final Notes
+
+When Vercel detects a Vite project, it will try to apply its own optimization settings. Our configuration aligns with these expectations while also ensuring the correct paths are used.
