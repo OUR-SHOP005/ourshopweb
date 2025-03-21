@@ -1,21 +1,23 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "build": {
-    "src": "client/",
-    "use": "@vercel/static-build",
-    "config": {
-      "distDir": "dist"
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": null,
+  "outputDirectory": "dist",
+  "functions": {
+    "api/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
     }
   },
   "routes": [
-    {
-      "src": "/.*",
-      "dest": "/index.html"
-    }
-  ]
+    { "handle": "filesystem" },
+    { "src": "/api/(.*)", "dest": "/api" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "env": {
+    "RESEND_API_KEY": "${RESEND_API_KEY}",
+    "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+  }
 }
