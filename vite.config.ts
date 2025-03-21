@@ -1,16 +1,21 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  root: 'client/src',          // Set the new root to `client/src`
+  root: './client',
   build: {
-    outDir: '../../dist',      // Output the build outside `client/src`
-    rollupOptions: {
-      input: 'client/src/index.html'   // Specify the new entry module
-    }
+    outDir: '../dist',
   },
   server: {
-    port: 3000
+    port: 3000,
+    host: '0.0.0.0'
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './client/src')
+    }
   }
 });
