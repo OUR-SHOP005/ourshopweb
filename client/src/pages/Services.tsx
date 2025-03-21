@@ -1,8 +1,25 @@
-
 import { SERVICES } from "@/lib/constants";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+
+const UPDATED_SERVICES = [
+  ...SERVICES,
+  {
+    title: "Website Maintenance Package",
+    description: "Monthly website management and maintenance service.",
+    details: [
+      "Regular website updates",
+      "Content management",
+      "Security monitoring",
+      "Performance optimization",
+      "24/7 support",
+      "Monthly analytics report"
+    ],
+    pricing: "₹1,999/month"
+  },
+];
+
 
 export default function Services() {
   return (
@@ -14,7 +31,7 @@ export default function Services() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        {SERVICES.map((service) => (
+        {UPDATED_SERVICES.map((service) => (
           <div key={service.title} className="border rounded-lg p-6 hover:shadow-lg transition-shadow">
             <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
             <p className="text-muted-foreground mb-4">{service.description}</p>
