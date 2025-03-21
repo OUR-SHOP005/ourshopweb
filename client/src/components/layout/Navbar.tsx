@@ -43,7 +43,7 @@ const Navbar = () => {
             <img 
               src="/assets/logo/logo.jpeg" 
               alt="Our Shop Logo" 
-              className="w-10 h-10 rounded-full object-cover"
+              className="w-10 h-10 rounded-full object-cover border-2 border-primary"
             />
             <span className="text-lg font-bold tracking-tight text-gray-900">
               OUR SHOP

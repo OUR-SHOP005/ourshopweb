@@ -2,7 +2,7 @@ export const SERVICES = [
   {
     title: "Web Design",
     description: "Beautiful, responsive websites that engage your audience",
-    icon: "Palette",
+    icon: "",
     details: [
       "Custom responsive design",
       "Mobile-first approach",
@@ -15,7 +15,7 @@ export const SERVICES = [
   {
     title: "Web Development",
     description: "Custom web applications built with modern technologies",
-    icon: "Code2",
+    icon: "",
     details: [
       "Full-stack development",
       "API integration",
@@ -28,7 +28,7 @@ export const SERVICES = [
   {
     title: "E-Commerce",
     description: "Online stores that drive sales and growth",
-    icon: "ShoppingCart",
+    icon: "",
     details: [
       "Product catalog setup",
       "Payment gateway integration",
@@ -41,7 +41,7 @@ export const SERVICES = [
   {
     title: "UI/UX Design",
     description: "User-centered design that converts visitors into customers",
-    icon: "Layout",
+    icon: "",
     details: [
       "User interface design",
       "User experience optimization",

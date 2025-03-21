@@ -9,7 +9,7 @@
     "src": "client/",
     "use": "@vercel/static-build",
     "config": {
-      "distDir": "dist"           // ✅ Ensure Vercel uses the dist folder
+      "distDir": "dist"
     }
   },
   "routes": [

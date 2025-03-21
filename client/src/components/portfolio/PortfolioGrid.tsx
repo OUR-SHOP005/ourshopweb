@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { portfolioItems } from "@/lib/data";
+import { PORTFOLIO_ITEMS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 
-type CategoryFilter = "all" | "e-commerce" | "web-design" | "web-application" | "web-development";
+type CategoryFilter = "all" | "E-Commerce" | "Web Design" | "Web Application" | "Web Development";
 
 const PortfolioGrid = () => {
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
 
   const filteredItems = activeFilter === "all" 
-    ? portfolioItems 
-    : portfolioItems.filter(item => item.category === activeFilter);
+    ? PORTFOLIO_ITEMS 
+    : PORTFOLIO_ITEMS.filter(item => item.category === activeFilter);
 
   return (
     <div>
@@ -23,30 +23,30 @@ const PortfolioGrid = () => {
           All
         </Button>
         <Button
-          variant={activeFilter === "e-commerce" ? "default" : "outline"}
-          onClick={() => setActiveFilter("e-commerce")}
-          className={activeFilter === "e-commerce" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
+          variant={activeFilter === "E-Commerce" ? "default" : "outline"}
+          onClick={() => setActiveFilter("E-Commerce")}
+          className={activeFilter === "E-Commerce" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
         >
           E-Commerce
         </Button>
         <Button
-          variant={activeFilter === "web-design" ? "default" : "outline"}
-          onClick={() => setActiveFilter("web-design")}
-          className={activeFilter === "web-design" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
+          variant={activeFilter === "Web Design" ? "default" : "outline"}
+          onClick={() => setActiveFilter("Web Design")}
+          className={activeFilter === "Web Design" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
         >
           Web Design
         </Button>
         <Button
-          variant={activeFilter === "web-application" ? "default" : "outline"}
-          onClick={() => setActiveFilter("web-application")}
-          className={activeFilter === "web-application" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
+          variant={activeFilter === "Web Application" ? "default" : "outline"}
+          onClick={() => setActiveFilter("Web Application")}
+          className={activeFilter === "Web Application" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
         >
           Web Application
         </Button>
         <Button
-          variant={activeFilter === "web-development" ? "default" : "outline"}
-          onClick={() => setActiveFilter("web-development")}
-          className={activeFilter === "web-development" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
+          variant={activeFilter === "Web Development" ? "default" : "outline"}
+          onClick={() => setActiveFilter("Web Development")}
+          className={activeFilter === "Web Development" ? "bg-gray-900 text-white" : "bg-white text-gray-600 hover:bg-gray-100"}
         >
           Web Development
         </Button>
@@ -54,10 +54,10 @@ const PortfolioGrid = () => {
 
       {/* Portfolio Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredItems.map((item) => (
+        {filteredItems.map((item, index) => (
           <div
-            key={item.id}
-            className="group relative rounded-lg overflow-hidden shadow-md bg-white"
+            key={index}
+            className="rounded-lg overflow-hidden shadow-md bg-white border border-gray-200"
             data-category={item.category}
           >
             <img
@@ -67,20 +67,12 @@ const PortfolioGrid = () => {
             />
             <div className="p-4">
               <div className="text-xs text-primary font-semibold mb-1 capitalize">
-                {item.category.replace("-", " ")}
+                {item.category}
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-1">
                 {item.title}
               </h3>
               <p className="text-gray-500 text-sm">{item.description}</p>
-            </div>
-            <div className="absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a
-                href="#"
-                className="text-white bg-transparent border-2 border-white hover:bg-white hover:text-primary px-4 py-2 rounded-md transition-all"
-              >
-                View Details
-              </a>
             </div>
           </div>
         ))}

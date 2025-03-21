@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { services } from "@/lib/data";
+import { SERVICES } from "@/lib/constants";
 import { Card, CardContent } from "@/components/ui/card";
 
 const ServicesOverview = () => {
@@ -11,13 +11,10 @@ const ServicesOverview = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {services.map((service) => (
-            <Link key={service.id} href={`/services#${service.id}`}>
-              <Card className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full">
+          {SERVICES.map((service, index) => (
+            <Link key={index} href={`/services`}>
+              <Card className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer h-full">
                 <CardContent className="p-0">
-                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-                    {service.icon}
-                  </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
                     {service.title}
                   </h3>
