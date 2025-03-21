@@ -18,7 +18,12 @@ const TeamMember = ({ member }: TeamMemberProps) => {
         <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
         <p className="text-primary font-medium mb-3">{member.role}</p>
         <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
-        <a href="#" className="text-primary hover:text-primary-700 flex items-center gap-1">
+        <a 
+          href={`https://instagram.com/${member.instagram}`}
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-primary hover:text-primary-700 flex items-center gap-1"
+        >
           <Instagram size={18} />
           {member.instagram}
         </a>
