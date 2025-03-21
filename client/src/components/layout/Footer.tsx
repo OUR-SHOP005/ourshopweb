@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Instagram, Linkedin, Youtube } from "lucide-react";
+import { SOCIAL_MEDIA } from "@/lib/constants";
 
 const Footer = () => {
   return (
@@ -65,21 +66,27 @@ const Footer = () => {
             </h3>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href={`https://instagram.com/${SOCIAL_MEDIA.instagram}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary"
                 aria-label="Instagram"
               >
                 <Instagram size={20} />
               </a>
               <a
-                href="#"
+                href={`https://linkedin.com/in/${SOCIAL_MEDIA.linkedin}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={20} />
               </a>
               <a
-                href="#"
+                href={`https://youtube.com/${SOCIAL_MEDIA.youtube}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary"
                 aria-label="YouTube"
               >
