@@ -5,12 +5,17 @@
       "destination": "/index.html"
     }
   ],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/index.html",
-      "statusCode": 200
+  "build": {
+    "src": "client/",
+    "use": "@vercel/static-build",
+    "config": {
+      "distDir": "dist"           // ✅ Ensure Vercel uses the dist folder
     }
-  ],
-  "cleanUrls": true
+  },
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "/index.html"
+    }
+  ]
 }

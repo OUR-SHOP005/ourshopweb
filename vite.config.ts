@@ -1,27 +1,21 @@
-
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  root: './client',
+  root: "./client",                 // ✅ Set the root to client
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./client/src")  // ✅ Ensure alias is correct
+    }
+  },
   build: {
-    outDir: path.resolve(__dirname, 'dist'),
-    emptyOutDir: true
+    outDir: "../dist",             // ✅ Build dist outside client
+    emptyOutDir: true,             // ✅ Clean dist before building
   },
   server: {
     port: 3000,
-    host: '0.0.0.0'
+    host: "0.0.0.0",
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './client/src'),
-      '@shared': path.resolve(__dirname, './shared'),
-      'shared': path.resolve(__dirname, './shared')
-    }
-  }
 });
