@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         from: 'OurShop Contact Form <onboarding@resend.dev>', // This is the default sender for unverified domains
         to: [recipientEmail],
         subject: `Contact Form: ${subject}`,
-        reply_to: email,
+        replyTo: email,
         text: `
           Name: ${name}
           Email: ${email}
