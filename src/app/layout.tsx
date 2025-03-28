@@ -3,12 +3,13 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '../components/ThemeProvider'
 import { Footer } from '../components/Footer'
+import { ChatPopup } from '../components/ChatPopup'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'OurShop - Local Shopping in Shoremere',
-  description: 'Your local shopping destination in Shoremere offering quality products and services.',
+  title: 'OurShop - Web Design & Development Agency',
+  description: 'Award-winning web design agency helping businesses succeed in the digital world through innovative design and development solutions.',
 }
 
 export default function RootLayout({
@@ -24,6 +25,7 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <ChatPopup />
         </ThemeProvider>
       </body>
     </html>
