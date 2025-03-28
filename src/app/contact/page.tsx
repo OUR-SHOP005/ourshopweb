@@ -1,7 +1,7 @@
 'use client'
 
-import { MotionDiv } from '@/components/ui/MotionWrapper'
-import { Navigation } from '@/components/Navigation'
+import { MotionDiv } from '../../components/ui/MotionWrapper'
+import { Navigation } from '../../components/Navigation'
 import { useState } from 'react'
 
 export default function ContactPage() {
@@ -12,33 +12,64 @@ export default function ContactPage() {
     message: '',
   })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('loading')
+    setErrorMessage('')
 
     try {
-      // Create a mailto link with the form data
-      const mailtoLink = `mailto:ourshop005@gmail.com?subject=${encodeURIComponent(
-        formData.subject
-      )}&body=${encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-      )}`
-
-      // Open the default email client
-      window.location.href = mailtoLink
-
-      // Reset form and show success message
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
+      // First try to send via the API
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       })
-      setStatus('success')
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        // API successfully sent the email
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+        })
+        setStatus('success')
+      } else if (data.mailtoLink) {
+        // API is not fully configured (no EMAIL_PASS), use mailto fallback
+        window.location.href = data.mailtoLink
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+        })
+        setStatus('success')
+      } else {
+        // API returned an error
+        throw new Error(data.error || 'Failed to send email')
+      }
     } catch (error) {
       console.error('Error sending email:', error)
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to send email. Please try again.')
       setStatus('error')
+
+      // Fallback to mailto if API fails
+      try {
+        const mailtoLink = `mailto:ourshop005@gmail.com?subject=${encodeURIComponent(
+          formData.subject
+        )}&body=${encodeURIComponent(
+          `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+        )}`
+        window.location.href = mailtoLink
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError)
+      }
     }
   }
 
@@ -54,14 +85,14 @@ export default function ContactPage() {
     <>
       <Navigation />
       <main className="min-h-screen pt-32">
-        <div className="container">
+        <div className="container mx-auto px-4">
           <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto text-center mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">Contact Us</h1>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-secondary">Contact Us</h1>
             <p className="text-lg text-gray-600 dark:text-gray-300">
               Have a question or want to know more? Get in touch with us!
             </p>
@@ -174,10 +205,14 @@ export default function ContactPage() {
                 </button>
 
                 {status === 'success' && (
-                  <p className="text-green-500 text-center">Message sent successfully!</p>
+                  <div className="p-4 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-lg">
+                    <p className="text-center">Message sent successfully! We'll get back to you soon.</p>
+                  </div>
                 )}
                 {status === 'error' && (
-                  <p className="text-red-500 text-center">Error sending message. Please try again.</p>
+                  <div className="p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-lg">
+                    <p className="text-center">{errorMessage || 'Error sending message. Please try again.'}</p>
+                  </div>
                 )}
               </form>
             </MotionDiv>
