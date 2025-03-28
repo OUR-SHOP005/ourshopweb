@@ -6,6 +6,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
+import type { ExtraProps } from 'react-markdown'
+import type { Components } from 'react-markdown'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -198,12 +200,18 @@ export function ChatPopup() {
                           blockquote: ({ node, ...props }) => (
                             <blockquote className="pl-2 border-l-2 border-gray-300 dark:border-gray-700 italic my-2" {...props} />
                           ),
-                          code: ({ node, inline, ...props }) =>
-                            inline ? (
-                              <code className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs" {...props} />
+                          code: ({ className, children, ...rest }: any) => {
+                            const match = /language-(\w+)/.exec(className || '')
+                            return match ? (
+                              <code className="block p-2 bg-gray-100 dark:bg-gray-700 rounded text-xs overflow-x-auto my-2" {...rest}>
+                                {children}
+                              </code>
                             ) : (
-                              <code className="block p-2 bg-gray-100 dark:bg-gray-700 rounded text-xs overflow-x-auto my-2" {...props} />
-                            ),
+                              <code className={`${className || ''} px-1 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs`} {...rest}>
+                                {children}
+                              </code>
+                            )
+                          },
                           pre: ({ node, ...props }) => <pre className="overflow-auto text-xs p-0 my-2" {...props} />,
                           em: ({ node, ...props }) => <em className="italic" {...props} />,
                           strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
