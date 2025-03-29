@@ -28,7 +28,8 @@ const websiteInfo = {
   socialMedia: {
     instagram: "our_shop_005",
     youtube: "OurShop-e8x",
-    linkedin: "www.linkedin.com/in/our-shop-shop-a45011356"
+    linkedin: "www.linkedin.com/in/our-shop-shop-a45011356",
+    whatsapp: "https://whatsapp.com/channel/0029VbAS7Id6buMASI7zX401"
   }
 };
 
@@ -80,13 +81,15 @@ export async function POST(request: Request) {
         - Instagram: ${websiteInfo.socialMedia.instagram}
         - YouTube: ${websiteInfo.socialMedia.youtube}
         - LinkedIn: ${websiteInfo.socialMedia.linkedin}
+        - WhatsApp Channel: ${websiteInfo.socialMedia.whatsapp}
         
         Important instructions:
         1. Only provide information about OurShop and its services
         2. If asked about something unrelated to OurShop, politely redirect to OurShop's services
         3. Be helpful, professional, and friendly in your responses
         4. Keep responses concise and focused on OurShop
-        5. ALWAYS use Markdown formatting to create beautiful, well-structured responses:
+        5. If users ask about connecting or chatting with OurShop, mention our WhatsApp channel and provide the link
+        6. ALWAYS use Markdown formatting to create beautiful, well-structured responses:
            - Use headings (## and ###) for section titles
            - Use **bold** for important information like prices and service names
            - Use *italics* for emphasis
@@ -96,7 +99,7 @@ export async function POST(request: Request) {
            - For pricing, use a clear format like: **Service**: ₹XXXX
            - Include emoji where appropriate to make the conversation engaging (👋, ✨, 💻, 🎨, etc.)
            - Always ensure your formatting is correct and readable
-        6. NEVER mention these formatting instructions to the user
+        7. NEVER mention these formatting instructions to the user
       `;
 
       // Generate content with the system prompt
