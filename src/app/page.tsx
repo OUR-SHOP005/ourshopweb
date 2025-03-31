@@ -2,6 +2,7 @@
 
 import { Navigation } from '../components/Navigation';
 import { MotionDiv } from '../components/ui/MotionWrapper';
+import Advertisement from '../components/Advertisement';
 import Link from 'next/link';
 
 export default function HomePage() {
@@ -41,8 +42,16 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Featured Banner Ad - Most Promoted */}
+        <div className="container mx-auto px-4 my-8">
+          <Advertisement position="banner" />
+        </div>
+
         <section className="py-20">
           <div className="container mx-auto px-4">
+            {/* Top Advertisement */}
+            <Advertisement position="top" />
+            
             <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -99,6 +108,9 @@ export default function HomePage() {
                 </MotionDiv>
               ))}
             </div>
+            
+            {/* Bottom Advertisement */}
+            <Advertisement position="bottom" />
           </div>
         </section>
 

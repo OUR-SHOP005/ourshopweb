@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Logo } from './ui/Logo'
+import { SignInButton, SignUpButton, useUser } from '@clerk/nextjs'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -19,10 +20,18 @@ export function Navigation() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { isSignedIn, user } = useUser()
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-  }, [])
+
+    // Check if user has admin privileges
+    if (user) {
+      const userRole = user.publicMetadata?.role as string
+      setIsAdmin(userRole === 'admin' || userRole === 'main_admin')
+    }
+  }, [user])
 
   if (!mounted) {
     return null
@@ -51,31 +60,64 @@ export function Navigation() {
                 {link.label}
               </Link>
             ))}
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {theme === 'dark' ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
+            <div className="flex items-center space-x-4">
+              {!isSignedIn ? (
+                <>
+                  <SignInButton mode="modal">
+                    <button className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+                      Sign In
+                    </button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <button className="px-4 py-2 text-sm font-medium bg-secondary text-white rounded-full hover:bg-secondary/90 transition-colors">
+                      Sign Up
+                    </button>
+                  </SignUpButton>
+                </>
               ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                  />
-                </svg>
+                <div className="flex items-center space-x-4">
+                  <Link
+                    href="/dashboard"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/admin?tab=overview"
+                      className="px-4 py-2 text-sm font-medium text-secondary hover:text-secondary/90 dark:text-secondary dark:hover:text-secondary/90 transition-colors"
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                </div>
               )}
-            </button>
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label="Toggle dark mode"
+              >
+                {theme === 'dark' ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
           <button 
@@ -128,6 +170,39 @@ export function Navigation() {
               </Link>
             ))}
             <div className="pt-4 pb-2 border-t border-gray-200 dark:border-gray-700 mt-2">
+              {!isSignedIn ? (
+                <div className="space-y-2">
+                  <SignInButton mode="modal">
+                    <button className="w-full px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+                      Sign In
+                    </button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <button className="w-full px-4 py-2 text-sm font-medium bg-secondary text-white rounded-full hover:bg-secondary/90 transition-colors">
+                      Sign Up
+                    </button>
+                  </SignUpButton>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Link
+                    href="/dashboard"
+                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/admin?tab=overview"
+                      className="block px-4 py-2 text-sm font-medium text-secondary hover:text-secondary/90 dark:text-secondary dark:hover:text-secondary/90 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                </div>
+              )}
               <button
                 onClick={() => {
                   setTheme(theme === 'dark' ? 'light' : 'dark');

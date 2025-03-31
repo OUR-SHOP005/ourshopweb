@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Navigation } from '../../../components/Navigation'
+import { ShareButtons } from '../../../components/ShareButtons'
 
 // Project data - this would typically come from a database or CMS
 const projects = [
@@ -79,6 +80,15 @@ export default function PortfolioDetailPage() {
   // If no project is found, show basic info based on the slug
   const title = project ? project.title : slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
   
+  // Function to get the current page URL for sharing
+  const getShareUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.href
+    }
+    // Fallback if window is not available
+    return `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ourshop.com'}/portfolio/${slug}`
+  }
+
   return (
     <>
       <Navigation />
@@ -120,6 +130,19 @@ export default function PortfolioDetailPage() {
               />
             </div>
 
+            {/* Share buttons */}
+            <div className="mb-8">
+              <h3 className="text-lg font-medium mb-3">Share this project</h3>
+              <ShareButtons 
+                url={getShareUrl()} 
+                title={`Check out this amazing project: ${title}`}
+                size={40}
+                className="mb-2"
+                showMore={true}
+                media={project ? project.image : `/projects/${slug}.jpg`}
+              />
+            </div>
+
             <div className="prose dark:prose-invert max-w-none mb-12">
               {project ? (
                 <>
@@ -156,26 +179,40 @@ export default function PortfolioDetailPage() {
             </div>
             
             <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-              <h3 className="text-xl font-bold mb-6">Interested in working with us?</h3>
-              <Link
-                href="/contact"
-                className="inline-flex items-center px-6 py-3 rounded-full bg-secondary text-white hover:bg-secondary/90 transition-colors"
-              >
-                Start a Project
-                <svg
-                  className="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6">
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Interested in working with us?</h3>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center px-6 py-3 rounded-full bg-secondary text-white hover:bg-secondary/90 transition-colors"
+                  >
+                    Start a Project
+                    <svg
+                      className="w-5 h-5 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+                
+                {/* Additional share buttons at the bottom */}
+                <div>
+                  <h3 className="text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">Share this project</h3>
+                  <ShareButtons 
+                    url={getShareUrl()} 
+                    title={`Check out this amazing project: ${title}`}
+                    size={32}
                   />
-                </svg>
-              </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

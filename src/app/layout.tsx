@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '../components/ThemeProvider'
 import { Footer } from '../components/Footer'
 import { ChatPopup } from '../components/ChatPopup'
+import { ConsentBanner } from '../components/ConsentBanner'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,13 +22,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex-grow">
-            {children}
-          </div>
-          <Footer />
-          <ChatPopup />
-        </ThemeProvider>
+        <ClerkProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="flex-grow">
+              {children}
+            </div>
+            <Footer />
+            <ChatPopup />
+            <ConsentBanner />
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   )
